@@ -35,11 +35,37 @@ function Update() //Game update
         // down
         objects[0].changeSpeed(-1)
     }
+    if (keyMap[65]) {
+        // left
+        objects[1].changeDirection(1)
+    }
+    if (keyMap[68]) {
+        // right
+        objects[1].changeDirection(-1)
+    }
+    if (keyMap[87]) {
+        // up
+        objects[1].changeSpeed(1)
+    }
+    if (keyMap[83]) {
+        // down
+        objects[1].changeSpeed(-1)
+    }
+    if (keyMap[190] || keyMap[96]) {
+        // period
+        objects[0].fireGun("red")
+    }
+    if (keyMap[32]) {
+        // spacebar
+        objects[1].fireGun("green")
+    }
 
-
+    // objects
+    // console.log(objects);
     for (let i = 0; i < objects.length; i++) {
         objects[i].Update();
     }
+
     Draw();
 }
 
@@ -49,17 +75,23 @@ function Draw() //Working with graphics
     let object;
     for (let i = 0; i < objects.length; i++) {
         object = objects[i]
-        drawImage(ctx,
-            document.getElementById(object.imageId),
-            object.x,
-            object.y,
-            1 / 2 - object.dir)
-    }
 
+        if (object.imageId) {
+            drawImage(ctx,
+                document.getElementById(object.imageId),
+                object.x,
+                object.y,
+                1 / 2 - object.dir)
+        } else {
+            object.Draw()
+        }
+
+    }
 }
 
 function KeyDown(e) {
     keyMap[e.keyCode] = true;
+    // console.log(e.keyCode);
 }
 
 function KeyUp(e) {
@@ -119,9 +151,12 @@ const initializeData = () => {
     window.addEventListener("resize", Resize);
     window.addEventListener("keydown", function (e) { KeyDown(e); });
     window.addEventListener("keyup", function (e) { KeyUp(e); });
-    objects[0] = new AirPlane("f-14", window.innerWidth / 2, window.innerHeight / 2); //An array of game objects
+    objects[0] = new AirPlane("f-14", window.innerWidth / 2, window.innerHeight / 2);
+    objects[1] = new AirPlane("mig29", window.innerWidth / 2 + 50, window.innerHeight / 2 + 50);
 
 }
+
+
 function main() {
     initializeData();
     Resize();

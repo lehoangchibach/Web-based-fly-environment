@@ -1,19 +1,23 @@
 const modal = document.querySelector(".modal");
 const overlay = document.querySelector(".overlay");
 const adventurer = document.querySelector(".adventurer")
-const form = document.getElementById("input_form");
-const input_form = document.getElementById("command");
+// const form = document.getElementById("input_form");
+// const input_form = document.getElementById("command");
+const buttonStartStop = document.getElementById("buttonOnOff");
 let canvas = document.getElementById("canvas");
 let ctx = canvas.getContext("2d");
 let scale = 0.1;
 let objects = [];
-let keyMap = {}
+let keyMap = {};
+let isRunning;
 
 function Start() {
+    isRunning = true;
     timer = setInterval(Update, 1000 / 60); //The game state will update 60 times per second - at this rate, the update of what is happening will seem very smooth
 }
 
 function Stop() {
+    isRunning = false;
     clearInterval(timer); //Stopping the update
 }
 
@@ -74,16 +78,23 @@ function Draw() //Working with graphics
     ctx.clearRect(0, 0, canvas.width, canvas.height); //Clearing the canvas from the previous frame
     let object;
     for (let i = 0; i < objects.length; i++) {
-        object = objects[i]
+        // object = objects[i]
 
-        if (object.imageId) {
-            drawImage(ctx,
-                document.getElementById(object.imageId),
-                object.x,
-                object.y,
-                1 / 2 - object.dir)
+        if (objects[i].imageId) {
+            img = document.getElementById(objects[i].imageId)
+            ctx.save();
+            ctx.translate(objects[i].x + img.width / 2, objects[i].y + img.height / 2);
+            ctx.rotate((1 / 2 - objects[i].dir) * Math.PI);
+            ctx.translate(- objects[i].x - img.width / 2, - objects[i].y - img.height / 2);
+            ctx.drawImage(img, objects[i].x, objects[i].y, img.width, img.height);
+            ctx.restore();
+            // drawImage(ctx,
+            //     document.getElementById(object.imageId),
+            //     object.x,
+            //     object.y,
+            //     1 / 2 - object.dir)
         } else {
-            object.Draw()
+            objects[i].Draw()
         }
 
     }
@@ -98,14 +109,14 @@ function KeyUp(e) {
     keyMap[e.keyCode] = false;
 }
 
-function drawImage(ctx, img, x, y, angle) {
-    ctx.save();
-    ctx.translate(x + img.width / 2, y + img.height / 2);
-    ctx.rotate(angle * Math.PI);
-    ctx.translate(- x - img.width / 2, - y - img.height / 2);
-    ctx.drawImage(img, x, y, img.width, img.height);
-    ctx.restore();
-}
+// function drawImage(ctx, img, x, y, angle) {
+//     ctx.save();
+//     ctx.translate(x + img.width / 2, y + img.height / 2);
+//     ctx.rotate(angle * Math.PI);
+//     ctx.translate(- x - img.width / 2, - y - img.height / 2);
+//     ctx.drawImage(img, x, y, img.width, img.height);
+//     ctx.restore();
+// }
 
 function Resize() {
     canvas.width = window.innerWidth;
@@ -122,32 +133,45 @@ const closeTutorial = () => {
     overlay.classList.add("hidden");
 }
 
-const receiveCommand = (e) => {
+// const receiveCommand = (e) => {
+//     e.preventDefault();
+//     console.log("e: " + e);
+//     let str = input_form.value;
+//     input_form.value = null;
+//     console.log("str: " + str);
+//     if (str == "restart") {
+//         localStorage.clear()
+//         main();
+//     } else if (str == 'stop') {
+//         Stop()
+//     } else if (str == 'start') {
+//         Start()
+//     }
+// }
+
+const turnOnOff = (e) => {
     e.preventDefault();
-    console.log("e: " + e);
-    let str = input_form.value;
-    input_form.value = null;
-    console.log("str: " + str);
-    if (str == "restart") {
-        localStorage.clear()
-        main();
-    } else if (str == 'stop') {
-        Stop()
-    } else if (str == 'start') {
-        Start()
+    if (isRunning) {
+        Stop();
+        buttonStartStop.innerText = "Start";
+    } else {
+        Start();
+        buttonStartStop.innerText = "Stop";
     }
+
 }
 
 const initializeData = () => {
     console.log("Welcome to the sky!")
-    if (!localStorage.getItem("playing")) {
-        localStorage.setItem("characterHealth", 10)
-        localStorage.setItem("characterAttack", 2)
-        localStorage.setItem("characterDefense", 2)
-        localStorage.setItem("stage", 1)
-        localStorage.setItem("playing", "true")
-    }
-    form.addEventListener("submit", (event) => receiveCommand(event))
+    // if (!localStorage.getItem("playing")) {
+    //     localStorage.setItem("characterHealth", 10)
+    //     localStorage.setItem("characterAttack", 2)
+    //     localStorage.setItem("characterDefense", 2)
+    //     localStorage.setItem("stage", 1)
+    //     localStorage.setItem("playing", "true")
+    // }
+    // form.addEventListener("submit", (event) => receiveCommand(event))
+    buttonStartStop.addEventListener("click", (event) => turnOnOff(event))
     window.addEventListener("resize", Resize);
     window.addEventListener("keydown", function (e) { KeyDown(e); });
     window.addEventListener("keyup", function (e) { KeyUp(e); });
@@ -164,33 +188,3 @@ function main() {
 }
 
 main();
-
-
-
-
-// switch (e.keyCode) {
-//     case 37: //Left
-//         objects[0].changeDirection(1)
-//         console.log("left");
-//         break;
-
-//     case 39: //Right
-//         objects[0].changeDirection(-1)
-//         console.log("right");
-//         break;
-
-//     case 38: //Up
-//         objects[0].changeSpeed(1)
-//         console.log("up");
-//         break;
-
-//     case 40: //Down
-//         objects[0].changeSpeed(-1)
-//         console.log("down");
-//         break;
-
-//     case 32: //Space
-//         break;
-//     case 27: //Esc
-//         break;
-// }

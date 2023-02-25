@@ -18,10 +18,10 @@ img {
 }
 
 .information_icon {
-    width: 50;
+    width: 50px;
     position: absolute;
-    bottom: 10;
-    right: 10;
+    bottom: 10px;
+    right: 10px;
     z-index: 2;
 }
 
@@ -94,9 +94,9 @@ img {
 
 .health_bar {
     position: absolute;
-    bottom: 10;
-    right: 130;
-    padding: 5;
+    bottom: 10px;
+    right: 130px;
+    padding: 5px;
     /* background-color: black; */
     z-index: 5;
     width: 30%;
@@ -110,10 +110,10 @@ img {
 
 #buttonOnOff {
     background-color: #ffcb05;
-    width: 60;
-    height: 30;
+    width: 60px;
+    height: 30px;
     position: absolute;
-    bottom: 20;
+    bottom: 20px;
     /* border: 1px; */
     font-family: "Serif";
     border-radius: 5px;

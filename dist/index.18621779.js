@@ -27,6 +27,8 @@ function Update() {
     objects[0].changeSpeed(1);
     if (keyMap[40]) // down
     objects[0].changeSpeed(-1);
+    if (keyMap[190] || keyMap[96]) // period
+    objects[0].fireGun("red");
     if (keyMap[65]) // left
     objects[1].changeDirection(1);
     if (keyMap[68]) // right
@@ -35,12 +37,9 @@ function Update() {
     objects[1].changeSpeed(1);
     if (keyMap[83]) // down
     objects[1].changeSpeed(-1);
-    if (keyMap[190] || keyMap[96]) // period
-    objects[0].fireGun("red");
     if (keyMap[32]) // spacebar
     objects[1].fireGun("green");
-    // objects
-    // console.log(objects);
+    // Update canvas
     for(let i = 0; i < objects.length; i++)objects[i].Update();
     Draw();
 }
@@ -54,7 +53,7 @@ function Draw() {
         ctx.translate(objects[i].x + img.width / 2, objects[i].y + img.height / 2);
         ctx.rotate((0.5 - objects[i].dir) * Math.PI);
         ctx.translate(-objects[i].x - img.width / 2, -objects[i].y - img.height / 2);
-        ctx.drawImage(img, objects[i].x, objects[i].y, img.width, img.height);
+        ctx.drawImage(img, Math.floor(objects[i].x), Math.floor(objects[i].y), img.width, img.height);
         ctx.restore();
     // drawImage(ctx,
     //     document.getElementById(object.imageId),
@@ -90,21 +89,6 @@ const closeTutorial = ()=>{
     modal.classList.add("hidden");
     overlay.classList.add("hidden");
 };
-// const receiveCommand = (e) => {
-//     e.preventDefault();
-//     console.log("e: " + e);
-//     let str = input_form.value;
-//     input_form.value = null;
-//     console.log("str: " + str);
-//     if (str == "restart") {
-//         localStorage.clear()
-//         main();
-//     } else if (str == 'stop') {
-//         Stop()
-//     } else if (str == 'start') {
-//         Start()
-//     }
-// }
 const turnOnOff = (e)=>{
     e.preventDefault();
     if (isRunning) {
@@ -117,14 +101,6 @@ const turnOnOff = (e)=>{
 };
 const initializeData = ()=>{
     console.log("Welcome to the sky!");
-    // if (!localStorage.getItem("playing")) {
-    //     localStorage.setItem("characterHealth", 10)
-    //     localStorage.setItem("characterAttack", 2)
-    //     localStorage.setItem("characterDefense", 2)
-    //     localStorage.setItem("stage", 1)
-    //     localStorage.setItem("playing", "true")
-    // }
-    // form.addEventListener("submit", (event) => receiveCommand(event))
     buttonStartStop.addEventListener("click", (event)=>turnOnOff(event));
     window.addEventListener("resize", Resize);
     window.addEventListener("keydown", function(e) {

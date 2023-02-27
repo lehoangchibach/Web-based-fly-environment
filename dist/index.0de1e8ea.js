@@ -71,7 +71,7 @@ class Bullet {
     }
     Draw() {
         ctx.fillStyle = this.color;
-        ctx.fillRect(this.x, this.y, 3, 3);
+        ctx.fillRect(Math.floor(this.x), Math.floor(this.y), 3, 3);
     }
     CheckBulletHit() {
         let distance;
